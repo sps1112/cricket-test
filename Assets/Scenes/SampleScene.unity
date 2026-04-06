@@ -1032,7 +1032,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BounceTarget
   canMoveTarget: 1
-  bounceHitRange: {x: -1, y: 1, z: -1.5, w: 1.5}
+  bounceHitRange: {x: -1, y: 1, z: -3, w: 3}
   moveSpeed: 4
 --- !u!1 &410087039
 GameObject:
@@ -1611,6 +1611,18 @@ PrefabInstance:
       propertyPath: manaager
       value: 
       objectReference: {fileID: 1079516631}
+    - target: {fileID: 4303167598318778700, guid: 7b5d59b40a8e17248bdf3752c82e07e9, type: 3}
+      propertyPath: moveSpeed
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 4303167598318778700, guid: 7b5d59b40a8e17248bdf3752c82e07e9, type: 3}
+      propertyPath: maxSwingForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4303167598318778700, guid: 7b5d59b40a8e17248bdf3752c82e07e9, type: 3}
+      propertyPath: minimumDistance
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 4303167598318778700, guid: 7b5d59b40a8e17248bdf3752c82e07e9, type: 3}
       propertyPath: throwPositions.Array.size
       value: 2

@@ -5,12 +5,9 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private GameManager manager;
-
     public GameObject UIWindow;
-
     public Button swingButton;
     public Button spinButton;
-
     public Button leftButton;
     public Button rightButton;
 
