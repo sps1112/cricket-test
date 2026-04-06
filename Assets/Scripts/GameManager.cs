@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 public enum BallThrowType
 {
@@ -13,10 +14,13 @@ public class GameManager : MonoBehaviour
     public BounceTarget target;
     [SerializeField] private bool bowlingFromLeft = true;
     [SerializeField] private BallThrowType type = BallThrowType.Swing;
+    [SerializeField] private bool directionIsLeft = true;
 
     void Start()
     {
         ui = GetComponent<UIManager>();
+        ui.UpdateTypeUI(type == BallThrowType.Swing);
+        ui.UpdateDirectionUI(directionIsLeft);
         ball.SwitchSide(bowlingFromLeft);
     }
 
@@ -26,6 +30,16 @@ public class GameManager : MonoBehaviour
         ball.SwitchSide(bowlingFromLeft);
     }
 
+    public void SetThrowType(bool isSwing)
+    {
+        type = (isSwing == true) ? BallThrowType.Swing : BallThrowType.Spin;
+    }
+
+    public void SetThrowDirection(bool isLeft)
+    {
+        directionIsLeft = isLeft;
+    }
+
     public void Bowl()
     {
         if (canBowl)
@@ -33,7 +47,7 @@ public class GameManager : MonoBehaviour
             canBowl = false;
             ui.SwitchUIState(canBowl);
             target.SwitchState(canBowl);
-            ball.Throw(type, target.transform.position);
+            ball.Throw(type, directionIsLeft, target.transform.position);
         }
     }
 

@@ -8,15 +8,7 @@ public class BallMotion : MonoBehaviour
     public float moveSpeed = 5.0f;
     public float minimumDistance = 0.05f;
     public float maxTimeAfterBounce = 5.0f;
-    void Start()
-    {
-        Reset();
-    }
-
-    public void Reset()
-    {
-
-    }
+    public float maxSpinForce = 1;
 
     public void SwitchSide(bool bowlFromLeft)
     {
@@ -24,23 +16,48 @@ public class BallMotion : MonoBehaviour
         transform.position = throwPos;
     }
 
-    public void Throw(BallThrowType type, Vector3 targetPos)
+    public void Throw(BallThrowType type, bool directionIsLeft, Vector3 targetPos)
     {
-        Debug.Log("Bowl");
-        StartCoroutine(MoveToBounceTarget(targetPos));
+        StartCoroutine(MoveToBounceTarget(type, directionIsLeft, targetPos));
     }
 
-    private IEnumerator MoveToBounceTarget(Vector3 target)
+    private IEnumerator MoveToBounceTarget(BallThrowType type, bool directionIsLeft, Vector3 target)
     {
         Vector3 direction = Vector3.forward;
+
+        // Travelling in air
         while (transform.position.z < target.z)
         {
-            direction = (target - transform.position).normalized;
-            transform.forward = direction;
-            transform.position += direction * moveSpeed * Time.deltaTime;
+            if (type == BallThrowType.Swing)
+            {
+                direction = (target - transform.position).normalized;
+                transform.forward = direction;
+                transform.position += direction * moveSpeed * Time.deltaTime;
+            }
+            else // Spin
+            {
+                direction = (target - transform.position).normalized;
+                transform.forward = direction;
+                transform.position += transform.forward * moveSpeed * Time.deltaTime;
+            }
             yield return new WaitForEndOfFrame();
         }
-        direction.y = -direction.y;
+
+        //  Bounce
+        if (type == BallThrowType.Swing)
+        {
+            direction.y = -direction.y;
+        }
+        else // Spin
+        {
+            float rotateDir = directionIsLeft ? -1 : 1;
+            transform.Rotate(Vector3.up, rotateDir * maxSpinForce, Space.World);
+            Vector3 newForward = transform.forward;
+            newForward.y = -newForward.y;
+            direction = newForward;
+        }
+
+        // After Bounce
         StartCoroutine(MovementAfterBounce(direction));
     }
 

@@ -125,6 +125,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1243299e3ffde2a47b0c32ab3d980540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BallMotion
+  manaager: {fileID: 0}
   throwPositions: []
-  moveSpeed: 10
+  moveSpeed: 15
   minimumDistance: 0.05
+  maxTimeAfterBounce: 1
+  defSwingForce: 1
+  maxSpinForce: 45
