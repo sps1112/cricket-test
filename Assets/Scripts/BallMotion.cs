@@ -27,15 +27,14 @@ public class BallMotion : MonoBehaviour
         trail.emitting = true;
     }
 
-    public void Throw(BallThrowType type, bool directionIsLeft, Vector3 targetPos)
+    public void Throw(BallThrowType type, bool directionIsLeft, float power, Vector3 targetPos)
     {
-        StartCoroutine(MoveToBounceTarget(type, directionIsLeft, targetPos));
+        StartCoroutine(MoveToBounceTarget(type, directionIsLeft, power, targetPos));
     }
 
-    private IEnumerator MoveToBounceTarget(BallThrowType type, bool directionIsLeft, Vector3 target)
+    private IEnumerator MoveToBounceTarget(BallThrowType type, bool directionIsLeft, float power, Vector3 target)
     {
         Vector3 direction = Vector3.forward;
-        float horizontalSpeed = maxSwingForce;
         float maxDistance = (target - transform.position).magnitude;
         float typeDir = directionIsLeft ? -1 : 1;
 
@@ -47,7 +46,7 @@ public class BallMotion : MonoBehaviour
                 Vector3 displacement = (target - transform.position);
                 float distance = displacement.magnitude;
                 displacement = displacement.normalized * moveSpeed * Time.deltaTime;
-                displacement.x += typeDir * maxSwingForce * (distance / maxDistance) * Time.deltaTime;
+                displacement.x += typeDir * (maxSwingForce * power) * (distance / maxDistance) * Time.deltaTime;
                 direction = displacement.normalized;
 
                 transform.forward = direction;
@@ -69,7 +68,7 @@ public class BallMotion : MonoBehaviour
         }
         else // Spin
         {
-            transform.Rotate(Vector3.up, typeDir * maxSpinForce, Space.World);
+            transform.Rotate(Vector3.up, typeDir * maxSpinForce * power, Space.World);
             Vector3 newForward = transform.forward;
             newForward.y = -newForward.y;
             direction = newForward;

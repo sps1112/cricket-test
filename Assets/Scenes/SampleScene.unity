@@ -2441,6 +2441,9 @@ MonoBehaviour:
   spinButton: {fileID: 1779195617}
   leftButton: {fileID: 462058717}
   rightButton: {fileID: 1845841428}
+  powerScaleUI: {fileID: 1061465096}
+  powerScaleLever: {fileID: 27020883}
+  powerScaleTimePeriod: 2.5
 --- !u!114 &1079516631
 MonoBehaviour:
   m_ObjectHideFlags: 0

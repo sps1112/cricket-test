@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using UnityEngine;
+
 public enum BallThrowType
 {
     Swing,
@@ -21,6 +22,7 @@ public class GameManager : MonoBehaviour
         ui = GetComponent<UIManager>();
         ui.UpdateTypeUI(type == BallThrowType.Swing);
         ui.UpdateDirectionUI(directionIsLeft);
+        ui.SwitchUIState(true);
         ball.SwitchSide(bowlingFromLeft);
     }
 
@@ -47,7 +49,7 @@ public class GameManager : MonoBehaviour
             canBowl = false;
             ui.SwitchUIState(canBowl);
             target.SwitchState(canBowl);
-            ball.Throw(type, directionIsLeft, target.transform.position);
+            ball.Throw(type, directionIsLeft, ui.GetPowerScale(), target.transform.position);
         }
     }
 

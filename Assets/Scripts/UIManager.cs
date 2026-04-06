@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -10,6 +11,10 @@ public class UIManager : MonoBehaviour
     public Button spinButton;
     public Button leftButton;
     public Button rightButton;
+    public RectTransform powerScaleUI;
+    public RectTransform powerScaleLever;
+    public float powerScaleTimePeriod;
+    private float powerScale = 0.0f;
 
     void Start()
     {
@@ -20,6 +25,43 @@ public class UIManager : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(null);
         UIWindow.SetActive(status);
+        if (status)
+        {
+            StartCoroutine(MovePowerScale());
+        }
+        else
+        {
+            StopAllCoroutines();
+        }
+    }
+
+    private IEnumerator MovePowerScale()
+    {
+        float amplitude = (powerScaleUI.rect.height - powerScaleLever.rect.height) / 2.0f;
+        float timer = 0.0f;
+        while (UIWindow.activeSelf)
+        {
+            Vector2 pos = powerScaleLever.anchoredPosition;
+            pos.y = amplitude * Mathf.Sin(timer * 2 * Mathf.PI / powerScaleTimePeriod);
+            powerScaleLever.anchoredPosition = pos;
+
+            if (pos.y < 0)
+            {
+                powerScale = 1.0f + (pos.y / amplitude);
+            }
+            else
+            {
+                powerScale = 1.0f - (pos.y / amplitude);
+            }
+
+            timer += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    public float GetPowerScale()
+    {
+        return powerScale;
     }
 
     public void ClickBowlSideChange()

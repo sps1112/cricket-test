@@ -11,6 +11,8 @@ public class BounceTarget : MonoBehaviour
     private Vector3 startOrigin;
     private Vector2 currentDisplacement;
 
+    public bool resetAfterEachBowl = false;
+
     void Start()
     {
         startOrigin = transform.position;
@@ -27,7 +29,7 @@ public class BounceTarget : MonoBehaviour
     public void SwitchState(bool status)
     {
         canMoveTarget = status;
-        if (canMoveTarget)
+        if (resetAfterEachBowl && canMoveTarget)
         {
             Reset();
         }
