@@ -3,14 +3,19 @@ using UnityEngine;
 
 public class BallMotion : MonoBehaviour
 {
-    public GameManager manaager;
-    public Transform[] throwPositions;
-    public float moveSpeed = 5.0f;
-    public float minimumDistance = 0.05f;
-    public float maxTimeAfterBounce = 5.0f;
+    [SerializeField] private GameManager manaager;
 
-    public float maxSwingForce = 10.0f;
-    public float maxSpinForce = 1;
+    [SerializeField] private Transform[] throwPositions;
+
+    [SerializeField] private float moveSpeed = 5.0f;
+
+    [Tooltip("Time to reset ball after bounce")]
+    [SerializeField] private float maxTimeAfterBounce = 5.0f;
+
+    [SerializeField] private float maxSwingForce = 10.0f;
+
+    [Tooltip("Maximum rotation caused in spin")]
+    [SerializeField] private float maxSpinForce = 1;
 
     private TrailRenderer trail;
 
@@ -19,6 +24,7 @@ public class BallMotion : MonoBehaviour
         trail = GetComponent<TrailRenderer>();
     }
 
+    // Switches side of ball from left or right side of wickets
     public void SwitchSide(bool bowlFromLeft)
     {
         trail.emitting = false;
@@ -27,12 +33,13 @@ public class BallMotion : MonoBehaviour
         trail.emitting = true;
     }
 
-    public void Throw(BallThrowType type, bool directionIsLeft, float power, Vector3 targetPos)
+    // Starts the Ball throw
+    public void Throw(bool isSwing, bool directionIsLeft, float power, Vector3 targetPos)
     {
-        StartCoroutine(MoveToBounceTarget(type, directionIsLeft, power, targetPos));
+        StartCoroutine(MoveToBounceTarget(isSwing, directionIsLeft, power, targetPos));
     }
 
-    private IEnumerator MoveToBounceTarget(BallThrowType type, bool directionIsLeft, float power, Vector3 target)
+    private IEnumerator MoveToBounceTarget(bool isSwing, bool directionIsLeft, float power, Vector3 target)
     {
         Vector3 direction = Vector3.forward;
         float maxDistance = (target - transform.position).magnitude;
@@ -41,9 +48,9 @@ public class BallMotion : MonoBehaviour
         // Travelling in air
         while (transform.position.z < target.z)
         {
-            if (type == BallThrowType.Swing)
+            if (isSwing) // Swing
             {
-                Vector3 displacement = (target - transform.position);
+                Vector3 displacement = target - transform.position;
                 float distance = displacement.magnitude;
                 displacement = displacement.normalized * moveSpeed * Time.deltaTime;
                 displacement.x += typeDir * (maxSwingForce * power) * (distance / maxDistance) * Time.deltaTime;
@@ -62,7 +69,7 @@ public class BallMotion : MonoBehaviour
         }
 
         //  Bounce
-        if (type == BallThrowType.Swing)
+        if (isSwing)  // Swing
         {
             direction.y = -direction.y;
         }
@@ -73,11 +80,13 @@ public class BallMotion : MonoBehaviour
             newForward.y = -newForward.y;
             direction = newForward;
         }
+        transform.forward = direction;
 
         // After Bounce
         StartCoroutine(MovementAfterBounce(direction));
     }
 
+    // Moves for a little while and then resets
     private IEnumerator MovementAfterBounce(Vector3 direction)
     {
         float timer = 0.0f;

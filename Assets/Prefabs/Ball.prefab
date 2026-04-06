@@ -247,8 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BallMotion
   manaager: {fileID: 0}
   throwPositions: []
-  moveSpeed: 15
-  minimumDistance: 0.05
+  moveSpeed: 18
   maxTimeAfterBounce: 1
-  maxSwingForce: 1.5
+  maxSwingForce: 10
   maxSpinForce: 45

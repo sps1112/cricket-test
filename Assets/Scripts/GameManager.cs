@@ -1,28 +1,35 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public enum BallThrowType
-{
-    Swing,
-    Spin,
-}
-
 public class GameManager : MonoBehaviour
 {
     private UIManager ui;
-    public bool canBowl = true;
-    public BallMotion ball;
-    public BounceTarget target;
+
+    private bool canBowl = true;
+
+    [SerializeField] private BallMotion ball;
+
+    [SerializeField] private BounceTarget target;
+
     [SerializeField] private bool bowlingFromLeft = true;
-    [SerializeField] private BallThrowType type = BallThrowType.Swing;
+
+    [SerializeField] private bool isTypeSwing = true;
+
+    [Tooltip("Which direction to apply the swing or spin")]
     [SerializeField] private bool directionIsLeft = true;
 
     void Start()
     {
         ui = GetComponent<UIManager>();
-        ui.UpdateTypeUI(type == BallThrowType.Swing);
+        ui.UpdateTypeUI(isTypeSwing);
         ui.UpdateDirectionUI(directionIsLeft);
         ui.SwitchUIState(true);
+        Invoke("RefreshObjects", 0.1f);
+    }
+
+    // Resets ball to near the wicket. Some issues in Start hence invoked some time later
+    private void RefreshObjects()
+    {
         ball.SwitchSide(bowlingFromLeft);
     }
 
@@ -34,7 +41,7 @@ public class GameManager : MonoBehaviour
 
     public void SetThrowType(bool isSwing)
     {
-        type = (isSwing == true) ? BallThrowType.Swing : BallThrowType.Spin;
+        isTypeSwing = isSwing;
     }
 
     public void SetThrowDirection(bool isLeft)
@@ -49,7 +56,7 @@ public class GameManager : MonoBehaviour
             canBowl = false;
             ui.SwitchUIState(canBowl);
             target.SwitchState(canBowl);
-            ball.Throw(type, directionIsLeft, ui.GetPowerScale(), target.transform.position);
+            ball.Throw(isTypeSwing, directionIsLeft, ui.GetPowerScale(), target.transform.position);
         }
     }
 

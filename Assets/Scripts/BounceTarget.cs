@@ -2,16 +2,18 @@ using UnityEngine;
 
 public class BounceTarget : MonoBehaviour
 {
-    [SerializeField] private bool canMoveTarget = true;
+    private bool canMoveTarget = true;
 
     [Tooltip("Bounds in Xmin,Xmax,Ymin,Ymax format")]
     [SerializeField] private Vector4 bounceHitRange = Vector2.one;
 
     [SerializeField] private float moveSpeed = 2.0f;
+
     private Vector3 startOrigin;
+
     private Vector2 currentDisplacement;
 
-    public bool resetAfterEachBowl = false;
+    [SerializeField] private bool resetAfterEachBowl = false;
 
     void Start()
     {
@@ -19,13 +21,15 @@ public class BounceTarget : MonoBehaviour
         Reset();
     }
 
-    public void Reset()
+    // Resets the bounce target to origin
+    private void Reset()
     {
         currentDisplacement = Vector2.zero;
         transform.position = startOrigin;
         canMoveTarget = true;
     }
 
+    // Called by gamemanager to stop the target movement when we have thrown the ball
     public void SwitchState(bool status)
     {
         canMoveTarget = status;
@@ -35,6 +39,7 @@ public class BounceTarget : MonoBehaviour
         }
     }
 
+    // Clamps the position in the XZ Plane inside the limits
     private void ClampDisplacement()
     {
         currentDisplacement.x = (currentDisplacement.x < bounceHitRange.x) ? bounceHitRange.x : currentDisplacement.x;

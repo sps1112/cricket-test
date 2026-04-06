@@ -6,21 +6,37 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private GameManager manager;
-    public GameObject UIWindow;
-    public Button swingButton;
-    public Button spinButton;
-    public Button leftButton;
-    public Button rightButton;
-    public RectTransform powerScaleUI;
-    public RectTransform powerScaleLever;
-    public float powerScaleTimePeriod;
+
+    [Header("UI Windows")]
+
+    [SerializeField] private GameObject UIWindow;
+
+    [SerializeField] private Button swingButton;
+
+    [SerializeField] private Button spinButton;
+
+    [SerializeField] private Button leftButton;
+
+    [SerializeField] private Button rightButton;
+
+    [Header("Power Scale")]
+
+    [Tooltip("The parent object which holds the level and divisions")]
+    [SerializeField] private RectTransform powerScaleUI;
+
+    [SerializeField] private RectTransform powerScaleLever;
+
+    [SerializeField] private float powerScaleTimePeriod;
+
     private float powerScale = 0.0f;
+
 
     void Start()
     {
         manager = GetComponent<GameManager>();
     }
 
+    // Hides or shows the UI and activates the power scale when shown
     public void SwitchUIState(bool status)
     {
         EventSystem.current.SetSelectedGameObject(null);
@@ -35,6 +51,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    // Oscillates the power scale
     private IEnumerator MovePowerScale()
     {
         float amplitude = (powerScaleUI.rect.height - powerScaleLever.rect.height) / 2.0f;
